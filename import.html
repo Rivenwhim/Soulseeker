@@ -95,8 +95,37 @@
       });
     });
     function showImportUI() {
+      document.getElementById('importDiv').style.display = 'block';
     }
-</script>
+    document.getElementById('convertBtn').addEventListener('click', () => {
+      const csvText = document.getElementById('csvInput').value.trim();
+      if (!csvText) {
+        alert('Please paste some CSV data first.');
+        return;
+      }
+      const lines = csvText.split('\n');
+      const items = lines.map(line => {
+        const parts = line.split(',');
+        return {
+          name: parts[0]?.trim() || '',
+          quantity: parseInt(parts[1]?.trim()) || 0
+        };
+      })
+      .filter(item => item.name && item.quantity > 0);
+      if (items.length === 0) {
+        alert('No valid items found in CSV.');
+        return;
+      }
+      db.collection('guildVault').doc('items').set({ items })
+      .then(() => {
+        document.getElementById('importStatus').textContent = 'Data imported successfully!';
+        document.getElementById('csvInput').value = '';
+      })
+      .catch(error => {
+        document.getElementById('importStatus').textContent = 'Error saving data: ' + error.message;
+      });
+  });
+  </script>
 </head>
 <body>
   <h1>Import Vault Data</h1>
@@ -107,6 +136,9 @@
     <button id="loginBtn">Login</button>
     <p id="loginError" style="color:red;"></p>
   </div>
-  <textarea id="csvInput" placeholder="Paste your CSV data here..."></textarea>
-  <button id="convertBtn">Import</button>
+  <div id="importDiv" style="display:none;">
+    <textarea id="csvInput" placeholder="Paste your CSV data here..."></textarea>
+    <button id="convertBtn">Import</button>
+    <p id="importStatus" style="color:#ddd;"></p>
+  </div>
 </body>
