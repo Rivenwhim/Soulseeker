@@ -79,24 +79,6 @@
     const db = firebase.firestore();
   </script>
   <script>
-    const loginDiv = document.getElementById('loginDiv');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
-    loginBtn.addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      auth.signInWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        loginDiv.style.display = 'none';
-        showImportUI();
-      })
-      .catch(error => {
-        loginError.textContent = error.message;
-      });
-    });
-    function showImportUI() {
-      document.getElementById('importDiv').style.display = 'block';
-    }
     document.getElementById('convertBtn').addEventListener('click', () => {
       const csvText = document.getElementById('csvInput').value.trim();
       if (!csvText) {
@@ -141,4 +123,24 @@
     <button id="convertBtn">Import</button>
     <p id="importStatus" style="color:#ddd;"></p>
   </div>
+  <script>
+    const loginDiv = document.getElementById('loginDiv');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    loginBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        loginDiv.style.display = 'none';
+        showImportUI();
+      })
+      .catch(error => {
+        loginError.textContent = error.message;
+      });
+    });
+    function showImportUI() {
+      document.getElementById('importDiv').style.display = 'block';
+    }
+  </script>
 </body>
