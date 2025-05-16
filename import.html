@@ -1,10 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8 /">
   <title>Guild Vault Import</title>
   <style>
-    
+    body {
+      /* background-color: #121212; */
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      position: relative;
+      z-index: 0;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://iili.io/3g2iqXV.md.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+      z-index: -1;
+      background-attachment: fixed;
+    }
+    h1 {
+      color: #dddddd;
+    }
+    h2 {
+      color: #dddddd;
+      margin-top: 30px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    .quantity {
+      color: #dddddd;
+      margin-left: 6px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      background: #222;
+      color: #eee;
+      border: 1px solid #444;
+      font-family: monospace;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    button {
+      background: #444;
+      color: #eee;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+    }
   </style>
 </head>
+<body>
+  <h1>Import Vault Data</h1>
+  <textarea id="csvInput" placeholder="Paste your CSV data here..."></textarea>
+</body>
