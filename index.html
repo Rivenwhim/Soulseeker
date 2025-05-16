@@ -56,53 +56,18 @@
     Guild Vault
   </h1>
   <br>
-  <h2>Gear
-  </h2>
-   <ul>
-     <li><a href="https://www.wowhead.com/classic/item=16834" target="_blank">[Cenarion Helm]</a></li>
-     <li><a href="https://www.wowhead.com/classic/item=21803" target="_blank">[Helm of the Holy Avenger]</a></li>
-     <li><a href="https://www.wowhead.com/classic/item=20408" target="_blank">[Twilight Cultist Cowl]</a></li>
-  </ul>
-  <br>
-  <h2>Flasks & Food
-  </h2>
-  <ul>
-    <li><a href="https://www.wowhead.com/classic/item=13457" target="_blank">[Greater Fire Protection Potion]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=13506" target="_blank">[Flask of Petrification]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=18253" target="_blank">[Major Rejuvenation Potion]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=20452" target="_blank">[Smoked Desert Dumplings]</a><span class="quantity"> x150</span></li>
-    <li><a href="https://www.wowhead.com/classic/item=2450" target="_blank">[Briarthorn]</a><span class="quantity"> x20</span></li>
-  </ul>
-  <br>
-  <h2>Metal & Stone
-  </h2>
-   <ul>
-    <li><a href="https://www.wowhead.com/classic/item=15870" target="_blank">[Golden Skeleton Key]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=2770" target="_blank">[Copper Ore]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=12359" target="_blank">[Thorium Bar]</a><span class="quantity"> x300</span></li>
-  </ul>
-  <br>
-  <h2>Dust & Gems
-  </h2>
-   <ul>
-    <li><a href="https://www.wowhead.com/classic/item=7910" target="_blank">[Star Ruby]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=7971" target="_blank">[Black Pearl]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=16204" target="_blank">[Illusion Dust]</a></li>
-  </ul>
-  <br>
-  <h2>Cloth & Leather
-  </h2>
-   <ul>
-    <li><a href="https://www.wowhead.com/classic/item=14156" target="_blank">[Bottomless Bag]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=8170" target="_blank">[Rugged Leather]</a><span class="quantity"> x300</span></li>
-    <li><a href="https://www.wowhead.com/classic/item=4338" target="_blank">[Mageweave Cloth]</a><span class="quantity"> x300</span></li>
-  </ul>
-  <br>
-  <h2>Quests & Misc
-  </h2>
-   <ul>
-    <li><a href="https://www.wowhead.com/classic/item=2798" target="_blank">[Rethban Ore]</a></li>
-    <li><a href="https://www.wowhead.com/classic/item=730" target="_blank">[Murloc Eye]</a></li>
-  </ul>
+  <ul id="item-list"></ul>
+  <script>
+    fetch(items.json)
+    .then(response => response.json())
+    .then(items => {
+      const list = document.getElementById('item-list');
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="https://www.wowhead.com/classic/search?q=${encodeURIComponent(item.name)}" target="_blank">[${item.name}]</a><span class="quantity"> x${item.quantity}</span>`;
+        list.appendChild(li);
+      });
+    });
+  </script>
 </body>
 </html>
