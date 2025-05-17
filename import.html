@@ -133,7 +133,6 @@
         return;
       }
       const lines = csvText.split('\n').slice(1); // skip header row
-      const lines = csvText.split('\n');
       const items = lines.map(line => {
         const parts = line.split(',');
         return {
