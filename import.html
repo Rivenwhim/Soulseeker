@@ -6,7 +6,6 @@
   <title>Guild Vault Import</title>
   <style>
     body {
-      /* background-color: #121212; */
       font-family: Arial, sans-serif;
       padding: 20px;
       position: relative;
@@ -15,10 +14,7 @@
     body::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background-image: url('https://iili.io/3g2iqXV.md.png');
       background-size: cover;
       background-position: center;
@@ -26,11 +22,10 @@
       z-index: -1;
       background-attachment: fixed;
     }
-    h1 {
+    h1, h2 {
       color: #dddddd;
     }
     h2 {
-      color: #dddddd;
       margin-top: 30px;
     }
     ul {
@@ -86,7 +81,6 @@
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyBZ2ITRuEkfCNmw18bvRDHy54NKLWP__TM",
       authDomain: "guild-vault.firebaseapp.com",
@@ -96,12 +90,10 @@
       appId: "1:966561463014:web:975b8a33ac6dac92e35927"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // DOM elements
     const loginDiv = document.getElementById('loginDiv');
     const loginBtn = document.getElementById('loginBtn');
     const loginError = document.getElementById('loginError');
@@ -117,7 +109,7 @@
       importStatus.textContent = '';
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
+        .then(() => {
           loginDiv.style.display = 'none';
           importDiv.style.display = 'block';
         })
@@ -132,12 +124,14 @@
         alert('Please paste some CSV data first.');
         return;
       }
-      const lines = csvText.split('\n').slice(1); // skip header row
+      // Split lines and skip header line
+      const lines = csvText.split('\n').slice(1);
+
       const items = lines.map(line => {
         const parts = line.split(',');
         return {
-          name: parts[0]?.trim() || '',
-          quantity: parseInt(parts[1]?.trim()) || 0
+          name: parts[1]?.trim() || '',          // item name is 2nd column (index 1)
+          quantity: parseInt(parts[2]?.trim()) || 0  // quantity is 3rd column (index 2)
         };
       }).filter(item => item.name && item.quantity > 0);
 
@@ -147,7 +141,6 @@
       }
 
       try {
-        // Save items in Firestore document "guildVault/items"
         await setDoc(doc(db, 'guildVault', 'items'), { items });
         importStatus.textContent = 'Data imported successfully!';
         csvInput.value = '';
