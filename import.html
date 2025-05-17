@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <link rel="icon" href="data:," />
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Guild Vault Import</title>
   <style>
     body {
@@ -63,28 +63,6 @@
       font-size: 1em;
     }
   </style>
-  <script>
-  // Import Firebase functions from the modular SDK
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-  // Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBZ2ITRuEkfCNmw18bvRDHy54NKLWP__TM",
-    authDomain: "guild-vault.firebaseapp.com",
-    projectId: "guild-vault",
-    storageBucket: "guild-vault.firebasestorage.app",
-    messagingSenderId: "966561463014",
-    appId: "1:966561463014:web:975b8a33ac6dac92e35927"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  </script>
 </head>
 <body>
   <h1>Import Vault Data</h1>
@@ -103,63 +81,79 @@
     <p id="importStatus" style="color:#ddd;"></p>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const loginDiv = document.getElementById('loginDiv');
-      const loginBtn = document.getElementById('loginBtn');
-      const loginError = document.getElementById('loginError');
-      const importDiv = document.getElementById('importDiv');
-      const convertBtn = document.getElementById('convertBtn');
-      const csvInput = document.getElementById('csvInput');
-      const importStatus = document.getElementById('importStatus');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-      // Login button click handler
-      loginBtn.addEventListener('click', () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        console.log('Login clicked with', email, password);
-        auth.signInWithEmailAndPassword(email, password)
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZ2ITRuEkfCNmw18bvRDHy54NKLWP__TM",
+      authDomain: "guild-vault.firebaseapp.com",
+      projectId: "guild-vault",
+      storageBucket: "guild-vault.firebasestorage.app",
+      messagingSenderId: "966561463014",
+      appId: "1:966561463014:web:975b8a33ac6dac92e35927"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM elements
+    const loginDiv = document.getElementById('loginDiv');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const importDiv = document.getElementById('importDiv');
+    const convertBtn = document.getElementById('convertBtn');
+    const csvInput = document.getElementById('csvInput');
+    const importStatus = document.getElementById('importStatus');
+
+    loginBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      loginError.textContent = '';
+      importStatus.textContent = '';
+
+      signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
-          console.log('Login success:', userCredential);
           loginDiv.style.display = 'none';
           importDiv.style.display = 'block';
-          loginError.textContent = '';
         })
         .catch(error => {
-          console.error('Login error:', error);
           loginError.textContent = error.message;
         });
-      });
+    });
 
-      // Import button click handler
-      convertBtn.addEventListener('click', () => {
-        const csvText = csvInput.value.trim();
-        if (!csvText) {
-          alert('Please paste some CSV data first.');
-          return;
-        }
-        const lines = csvText.split('\n');
-        const items = lines.map(line => {
-          const parts = line.split(',');
-          return {
-            name: parts[0]?.trim() || '',
-            quantity: parseInt(parts[1]?.trim()) || 0
-          };
-        })
-        .filter(item => item.name && item.quantity > 0);
-        if (items.length === 0) {
-          alert('No valid items found in CSV.');
-          return;
-        }
-        db.collection('guildVault').doc('items').set({ items })
-        .then(() => {
-          importStatus.textContent = 'Data imported successfully!';
-          csvInput.value = '';
-        })
-        .catch(error => {
-          importStatus.textContent = 'Error saving data: ' + error.message;
-        });
-      });
+    convertBtn.addEventListener('click', async () => {
+      const csvText = csvInput.value.trim();
+      if (!csvText) {
+        alert('Please paste some CSV data first.');
+        return;
+      }
+      const lines = csvText.split('\n');
+      const items = lines.map(line => {
+        const parts = line.split(',');
+        return {
+          name: parts[0]?.trim() || '',
+          quantity: parseInt(parts[1]?.trim()) || 0
+        };
+      }).filter(item => item.name && item.quantity > 0);
+
+      if (items.length === 0) {
+        alert('No valid items found in CSV.');
+        return;
+      }
+
+      try {
+        // Save items in Firestore document "guildVault/items"
+        await setDoc(doc(db, 'guildVault', 'items'), { items });
+        importStatus.textContent = 'Data imported successfully!';
+        csvInput.value = '';
+      } catch (error) {
+        importStatus.textContent = 'Error saving data: ' + error.message;
+      }
     });
   </script>
 </body>
