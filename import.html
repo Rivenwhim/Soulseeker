@@ -62,25 +62,27 @@
       font-size: 1em;
     }
   </style>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-
   <script>
-    // Firebase config and initialization
-    const firebaseConfig = {
-      apiKey: "AIzaSyBZ2ITRuEkfCNmw18bvRDHy54NKLWP__TM",
-      authDomain: "guild-vault.firebaseapp.com",
-      projectId: "guild-vault",
-      storageBucket: "guild-vault.firebasestorage.app",
-      messagingSenderId: "966561463014",
-      appId: "1:966561463014:web:975b8a33ac6dac92e35927"
-    };
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+  // Import Firebase functions from the modular SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBZ2ITRuEkfCNmw18bvRDHy54NKLWP__TM",
+    authDomain: "guild-vault.firebaseapp.com",
+    projectId: "guild-vault",
+    storageBucket: "guild-vault.firebasestorage.app",
+    messagingSenderId: "966561463014",
+    appId: "1:966561463014:web:975b8a33ac6dac92e35927"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
   </script>
 </head>
 <body>
