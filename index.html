@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Guild Bank</title>
+  <title>Guild Vault</title>
   <script>
     var whTooltips = {
       colorLinks: true,
@@ -13,7 +13,6 @@
   <script src="https://wow.zamimg.com/widgets/power.js"></script>
   <style>
     body {
-      /* background-color: #121212; */
       font-family: Arial, sans-serif;
       padding: 20px;
       position: relative;
@@ -36,9 +35,6 @@
     h1 {
       color: #dddddd;
     }
-    h2 {
-      color: #dddddd;
-    }
     ul {
       list-style: none;
       padding: 0;
@@ -48,26 +44,45 @@
     }
     .quantity {
       color: #dddddd;
+      margin-left: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>
-    Guild Vault
-  </h1>
-  <br>
+  <h1>Guild Vault</h1>
   <ul id="item-list"></ul>
-  <script>
-    fetch('items.json')
-    .then(response => response.json())
-    .then(items => {
-      const list = document.getElementById('item-list');
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZ2ITRuEkfCNmw18bvRDHy54NKLWP__TM",
+      authDomain: "guild-vault.firebaseapp.com",
+      projectId: "guild-vault",
+      storageBucket: "guild-vault.firebasestorage.app",
+      messagingSenderId: "966561463014",
+      appId: "1:966561463014:web:975b8a33ac6dac92e35927"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const docRef = doc(db, 'guildVault', 'items');
+    const docSnap = await getDoc(docRef);
+
+    const list = document.getElementById('item-list');
+
+    if (docSnap.exists()) {
+      const items = docSnap.data().items;
       items.forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `<a href="https://www.wowhead.com/classic/search?q=${encodeURIComponent(item.name)}" target="_blank">[${item.name}]</a><span class="quantity"> x${item.quantity}</span>`;
+        li.innerHTML = `<a href="https://www.wowhead.com/classic/search?q=${encodeURIComponent(item.name)}" target="_blank">[${item.name}]</a><span class="quantity">x${item.quantity}</span>`;
         list.appendChild(li);
       });
-    });
+    } else {
+      list.innerHTML = '<li style="color: #ddd;">No items found in Firestore.</li>';
+    }
   </script>
 </body>
 </html>
