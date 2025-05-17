@@ -124,23 +124,28 @@
     <p id="importStatus" style="color:#ddd;"></p>
   </div>
   <script>
-    const loginDiv = document.getElementById('loginDiv');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
-    loginBtn.addEventListener('click', () => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginDiv = document.getElementById('loginDiv');
+      const loginBtn = document.getElementById('loginBtn');
+      const loginError = document.getElementById('loginError');
+      loginBtn.addEventListener('click', () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+      console.log('Login clicked with', email, password);
       auth.signInWithEmailAndPassword(email, password)
       .then(userCredential => {
+        console.log('Login success:', userCredential);
         loginDiv.style.display = 'none';
         showImportUI();
       })
       .catch(error => {
+        console.error('Login error:', error);
         loginError.textContent = error.message;
       });
     });
     function showImportUI() {
       document.getElementById('importDiv').style.display = 'block';
     }
-  </script>
+  });
+</script>
 </body>
