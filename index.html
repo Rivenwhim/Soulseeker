@@ -77,7 +77,7 @@
       const items = docSnap.data().items;
       items.forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `<a data-wowhead="item=${item.name}">[${item.name}]</a><span class="quantity"> x${item.quantity}</span>`;
+        li.innerHTML = `<span style="color: #00f;">[${item.name}]</span><span class="quantity"> x${item.quantity}</span>`;
         list.appendChild(li);
       });
     });
