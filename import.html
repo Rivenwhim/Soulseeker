@@ -94,6 +94,16 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    let allItems = [];
+
+    async function loadItems() {
+    const response = await fetch('https://rivenwhim.github.io/Soulseeker/items.json');
+    allItems = await response.json();
+    }
+
+await loadItems();
+
+
     const loginDiv = document.getElementById('loginDiv');
     const loginBtn = document.getElementById('loginBtn');
     const loginError = document.getElementById('loginError');
