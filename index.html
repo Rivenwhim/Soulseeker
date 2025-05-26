@@ -84,6 +84,9 @@
     else {
       list.innerHTML = '<li style="color: #ddd;">No items found in Firestore.</li>';
     }
+    if (typeof $WowheadPower !== 'undefined') {
+      $WowheadPower.refreshLinks();
+    }
   </script>
 </body>
 </html>
