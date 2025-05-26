@@ -77,9 +77,10 @@
       const items = docSnap.data().items;
       items.forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `<a href="#" data-wowhead="item=${item.name}">[${item.name}]</a><span class="quantity"> x${item.quantity}</span>`;
+        li.innerHTML = `<a data-wowhead="item=${item.name}">[${item.name}]</a><span class="quantity"> x${item.quantity}</span>`;
         list.appendChild(li);
       });
+    });
     } else {
       list.innerHTML = '<li style="color: #ddd;">No items found in Firestore.</li>';
     }
