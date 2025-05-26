@@ -139,11 +139,26 @@ await loadItems();
 
       const items = lines.map(line => {
         const parts = line.split(',');
+        const name = parts[1]?.trim() || '';
+        const quantity = parseInt(parts[2]?.trim()) || 0;
+  
+        if (!name || quantity <= 0) return null;
+
+        // Find item by name in allItems
+        const foundItem = allItems.find(i => i.Display_lang === name);
+
+        if (!foundItem) {
+          alert(`Item not found in lookup JSON: "${name}"`);
+          return null;
+        }
+
         return {
-          name: parts[1]?.trim() || '',          // item name is 2nd column (index 1)
-          quantity: parseInt(parts[2]?.trim()) || 0  // quantity is 3rd column (index 2)
+          id: foundItem.ID,
+          name: foundItem.Display_lang,
+          quantity: quantity
         };
-      }).filter(item => item.name && item.quantity > 0);
+      }).filter(item => item !== null);
+
 
       if (items.length === 0) {
         alert('No valid items found in CSV.');
